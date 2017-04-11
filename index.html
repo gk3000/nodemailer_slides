@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Building a contact form with Nodemailer</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/languages/javascript.min.js"></script>
+
+		
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+				<section><h2>Building a contact form which sends emails with Node.js</h2></section>
+
+				<section><img src="./img/Darth-Vader-Lack-of-Contact-Form.jpg"/></section>
+				</section>
+
+				<section>
+				<img src="./img/nodemailer.png"/>
+				</section>
+				
+				<section><code>npm install nodemailer --save</code></section>
+				
+				<section>Build the form</section>
+				<section>Assign POST request to the Send button with data from the form being passed as an argument</section>
+								<section>
+<pre><code class="javascript">const nodemailer = require('nodemailer');
+const transport = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'your_email@gmail.com',
+        pass: pwd,
+    },
+});
+
+
+app.post("/sendEmail", (req, res) => {
+	const mailOptions = {
+	    from: 'your_email@gmail.com',
+	    // to: req.body.email,
+	    to: 'your_email@gmail.com',
+	    replyTo: req.body.email,
+	    subject: "New message from " + req.body.name,
+	    html: req.body.message,
+	};
+	transport.sendMail(mailOptions, (error, info) => {
+	    if (error) {
+	        console.log(error);
+	        res.redirect('/contacts')
+	    }
+	    console.log(`Message sent: ${info.response}`);
+	    res.redirect('/contacts')
+	});
+})</code></pre>
+</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
